@@ -1,19 +1,20 @@
 // import Joi from "joi";
 import {Contact} from "../models/index.js";
-// import { listContacts, getContactById, addContact, removeContact, updateContact } from "../models/contacts.js";
-// import contactServise from "../models/contacts.js";
+
 import { contactsAddSchema } from "../schemas/index.js";
 import {HttpError} from "../helpers/index.js";
 
-// const contactsAddSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   phone: Joi.string().required(),
-// });
 
 const getAll = async (req, res, next) => {
   try {
-    const result = await Contact.find();
+    const {_id: owner} = req.user;
+
+//Pagination
+    const {page=1, limit=10} = req.query; //параметри запиту
+    const skip = (page-1) * limit;
+//End Pagination
+
+    const result = await Contact.find({owner}, {skip, limit}).populate("owner", "name email");
     res.json(result);
   } catch (error) {
     next(error);
@@ -39,8 +40,8 @@ const createNewContact = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-
-    const result = await Contact.create(req.body);
+    const {_id: owner} = req.user;
+    const result = await Contact.create({...req.body, owner});
     res.status(201).json(result);
   } catch (error) {
     next(error);
