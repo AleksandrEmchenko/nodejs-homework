@@ -46,13 +46,14 @@ const createNewContact = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const { _id: owner } = req.user;
-
+    const { _id: owner, email } = req.user;
+    
     const { path: oldPath, filename } = req.file;
     const newPath = path.join(avatarPath, filename);
 
     await fs.rename(oldPath, newPath);
-const avatar = path.join("avatars", filename);
+
+    const avatar = path.join("avatars", filename);
 
     const result = await Contact.create({ ...req.body, avatar, owner });
     res.status(201).json(result);
