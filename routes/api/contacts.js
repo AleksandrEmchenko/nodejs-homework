@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { isValidateId, authenticate } from "../../middlewars/index.js";
+import { isValidateId, authenticate, upload } from "../../middlewars/index.js";
 
 const contactsRouter = Router();
 
@@ -12,7 +12,7 @@ contactsRouter.get("/", contactControl.getAll);
 
 contactsRouter.get("/:id", isValidateId, contactControl.getById);
 
-contactsRouter.post("/", contactControl.createNewContact);
+contactsRouter.post("/", upload.single("avatar"), contactControl.createNewContact);
 
 contactsRouter.delete("/:id", isValidateId, contactControl.deleteById);
 
