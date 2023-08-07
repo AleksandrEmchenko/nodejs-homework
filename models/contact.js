@@ -21,6 +21,9 @@ const contactSchema = new Schema({
     ref: "user",
     required: true,
   },
+  avatar: {
+    type: String,
+  }
 }, {versionKey: false, timestamps: true});
 
 contactSchema.pre("findOneAndUpdate", isValidateAtUpdate);
