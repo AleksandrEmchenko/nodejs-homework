@@ -89,7 +89,6 @@ const newPath = path.resolve("public", "avatars");
 const updateAvatar = async (req, res) => {
   
   const {_id} = req.user;
-  console.log(_id)
   const {path: oldPath, filename} = req.file;
   const avatarURL = path.join(newPath, filename);
   
